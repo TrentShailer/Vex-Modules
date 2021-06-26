@@ -1,5 +1,5 @@
-#ifndef SmoothDrivetrain
-#define SmoothDrivetrain
+#ifndef SmoothDrivetrain_H
+#define SmoothDrivetrain_H
 
 #include "vex.h"
 #include "util.h"
@@ -16,7 +16,7 @@ class SmoothDrivetrain
 {
 private:
 	Vector2 speed = Vector2(0, 0);
-	void Stop() { Drivetrain.stop(); }
+	bool canToggle = true;
 
 public:
 	Vector2 maxSpeed = Vector2(100, 100);
@@ -24,17 +24,17 @@ public:
 
 	float stoppingThreshold = 5;
 
-	SmoothDrivetrain()
-	{
-	}
+	SmoothDrivetrain() {}
+
+	void Stop() { Drivetrain.stop(); }
 
 	void Drive(Vector2 target)
 	{
 		float xIncreaseBy = (target.x - speed.x) / acceleration;
-		speed.x < target.x ? speed.x += xIncreaseBy : speed.x += xIncreaseBy;
+		speed.x += xIncreaseBy;
 
 		float yIncreaseBy = (target.y - speed.y) / acceleration;
-		speed.y < target.y ? speed.y += yIncreaseBy : speed.y += yIncreaseBy;
+		speed.y += xIncreaseBy;
 
 		if (speed.within(stoppingThreshold) && target.within(stoppingThreshold))
 		{
@@ -46,19 +46,16 @@ public:
 
 		RightDriveSmart.setVelocity(speed.y * (maxSpeed.y / 100), percent);
 		RightDriveSmart.spin(forward);
-	};
+	}
 
-	SpeedDisplay()
+	int SpeedDisplay()
 	{
 		while (true)
 		{
 
 			Controller1.Screen.clearScreen();
 			Controller1.Screen.newLine();
-			std::ostringstream s;
-			s << "Max Speed: " << maxSpeed.x;
-
-			Controller1.Screen.print(s.str().c_str());
+			Controller1.Screen.print("Max Speed: " + (int)maxSpeed.x);
 
 			this_thread::sleep_for(20);
 		}
@@ -85,6 +82,6 @@ public:
 			maxSpeed.y -= 10;
 		}
 	}
-}
+};
 
 #endif

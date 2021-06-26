@@ -1,5 +1,5 @@
-#ifndef SmoothMotor
-#define SmoothMotor
+#ifndef SmoothMotor_H
+#define SmoothMotor_H
 
 #include "vex.h"
 #include <iostream>
@@ -11,9 +11,8 @@ using namespace vex;
 
 class SmoothMotor
 {
-
 private:
-	motor : _motor;
+	motor _motor;
 	float speed = 0;
 
 public:
@@ -28,7 +27,7 @@ public:
 	void Drive(float target)
 	{
 
-		float increaseBy = (target - speed) / modSpeed;
+		float increaseBy = (target - speed) / acceleration;
 		speed += increaseBy;
 
 		if (floatWithin(speed, -stoppingThreshold, stoppingThreshold) && floatWithin(target, -stoppingThreshold, stoppingThreshold))
@@ -36,7 +35,7 @@ public:
 			return Stop();
 		}
 
-		_motor.setVelocity(speed * (maxSpeed / 100), percent);
+		_motor.setVelocity(speed * (acceleration / 100), percent);
 		_motor.spin(forward);
 	}
 
@@ -44,6 +43,6 @@ public:
 	{
 		_motor.stop();
 	}
-}
+};
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef Pathfinding
-#define Pathfinding
+#ifndef Pathfinding_H
+#define Pathfinding_H
 
 #include "util.h"
 #include "math.h"
@@ -200,13 +200,13 @@ void MoveTo(Vector2 target)
 	}
 }
 
-void Initialise(util::side selectedSide)
+void Initialise(side selectedSide)
 {
 	std::cout << "Auton Initialised" << std::endl;
 	int x = 0;
 	int y = 0;
 	currentDir = north;
-	if (selectedSide == util::left)
+	if (selectedSide == side::left)
 	{
 		x = 0;
 	}

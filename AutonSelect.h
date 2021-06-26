@@ -1,5 +1,5 @@
-#ifndef AutonSelect
-#define AutonSelect
+#ifndef AutonSelect_H
+#define AutonSelect_H
 
 #include "util.h"
 #include "vex.h"
@@ -9,15 +9,15 @@
 
 using namespace vex;
 
-util::side curSide = none;
+side curSide = none;
 
 int timeForSelection = 20;
 
 static const char *EnumStrings[] = {"Left", "Right", "None"};
 
-void InitAutonSelect(void *left, void *right)
+void InitAutonSelect(void *left(void), void *right(void))
 {
-	Brain.Screen.DrawLine(240, 0, 240, 280);
+	Brain.Screen.drawLine(240, 0, 240, 280);
 	Brain.Screen.setCursor(2, 2);
 	Brain.Screen.print("Left");
 	Brain.Screen.setCursor(4, 2);
@@ -29,26 +29,26 @@ void InitAutonSelect(void *left, void *right)
 		int xPos = Brain.Screen.xPosition();
 		if (Brain.Screen.pressing())
 		{
-			curSide = (xPos > 240 ? util::side::right : util::side::left);
+			curSide = (xPos > 240 ? side::right : side::left);
 			break;
 		}
-		wait(20, msec)
+		wait(20, msec);
 	}
 
 	Brain.Screen.clearScreen();
-	Brain.Screen.print(EnumStrings[util::side::left]);
+	Brain.Screen.print(EnumStrings[side::left]);
 	wait(1000, msec);
 	Brain.Screen.clearScreen();
 
-	if (curSide == util::side::right)
+	if (curSide == side::right)
 	{
 		right();
-		return
+		return;
 	}
-	else if (curSide == util::side::left)
+	else if (curSide == side::left)
 	{
 		left();
-		return
+		return;
 	}
 }
 

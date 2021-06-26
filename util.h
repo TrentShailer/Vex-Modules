@@ -1,5 +1,5 @@
-#ifndef util
-#define util
+#ifndef util_H
+#define util_H
 
 enum side
 {

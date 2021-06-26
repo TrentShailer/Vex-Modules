@@ -1,7 +1,7 @@
-#ifndef ImageLoader
-#define ImageLoader
+#ifndef ImageLoader_H
+#define ImageLoader_H
 
-#include "/images/example.h"
+#include "./images/example.h"
 #include "vex.h"
 #include <regex>
 #include <sstream>
