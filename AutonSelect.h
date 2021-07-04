@@ -11,16 +11,22 @@ using namespace vex;
 
 side curSide = none;
 
-int timeForSelection = 20;
+team curTeam = team::red;
+
+int timeForSelection = 15;
 
 static const char *EnumStrings[] = {"Left", "Right", "None"};
+static const char *EnumStringsTeam[] = {"Red", "Blue"};
 
-void InitAutonSelect(void *left(void), void *right(void))
+side InitAutonSelect()
 {
-	Brain.Screen.drawLine(240, 0, 240, 280);
-	Brain.Screen.setCursor(2, 2);
+	Brain.Screen.drawLine(160, 0, 160, 280);
+	Brain.Screen.drawLine(320, 0, 320, 280);
+	Brain.Screen.setCursor(6, 2);
 	Brain.Screen.print("Left");
-	Brain.Screen.setCursor(4, 2);
+	Brain.Screen.setCursor(6, 22);
+	Brain.Screen.print("None");
+	Brain.Screen.setCursor(6, 44);
 	Brain.Screen.print("Right");
 	Brain.Screen.setCursor(0, 0);
 
@@ -29,27 +35,68 @@ void InitAutonSelect(void *left(void), void *right(void))
 		int xPos = Brain.Screen.xPosition();
 		if (Brain.Screen.pressing())
 		{
-			curSide = (xPos > 240 ? side::right : side::left);
+			if (xPos < 200)
+			{
+				curSide = side::left;
+			}
+			else if (xPos >= 160 && xPos < 320)
+			{
+				curSide = side::none;
+			}
+			else
+			{
+				curSide = side::right;
+			}
 			break;
 		}
 		wait(20, msec);
 	}
 
 	Brain.Screen.clearScreen();
-	Brain.Screen.print(EnumStrings[side::left]);
+	Brain.Screen.setCursor(6, 22);
+	Brain.Screen.print(EnumStrings[curSide]);
 	wait(1000, msec);
+	Brain.Screen.setCursor(0, 0);
 	Brain.Screen.clearScreen();
 
-	if (curSide == side::right)
+	return curSide;
+}
+
+team InitTeamSelect()
+{
+	Brain.Screen.drawLine(240, 0, 240, 280);
+	Brain.Screen.setCursor(6, 2);
+	Brain.Screen.print("Blue");
+	Brain.Screen.setCursor(6, 44);
+	Brain.Screen.print("Red");
+	Brain.Screen.setCursor(0, 0);
+
+	for (int i = 0; i < (timeForSelection * 1000) / 20; i++)
 	{
-		right();
-		return;
+		int xPos = Brain.Screen.xPosition();
+		if (Brain.Screen.pressing())
+		{
+			if (xPos < 240)
+			{
+				curTeam = team::blue;
+			}
+			else
+			{
+				curTeam = team::red;
+			}
+			break;
+		}
+		wait(20, msec);
 	}
-	else if (curSide == side::left)
-	{
-		left();
-		return;
-	}
+
+	Brain.Screen.clearScreen();
+	Brain.Screen.setCursor(6, 22);
+	Brain.Screen.print(EnumStringsTeam[curTeam]);
+	wait(1000, msec);
+	Brain.Screen.setCursor(0, 0);
+	Brain.Screen.clearScreen();
+
+	return curTeam;
 }
 
 #endif
